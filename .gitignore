@@ -4,3 +4,6 @@ Thumbs.db
 node_modules/
 .claude/
 .env.local
+CLAUDE.md
+gemini.md
+Gemini_Generated_Image_*.png
