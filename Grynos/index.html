@@ -1,0 +1,2316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grynos | Helping People with AI</title>
+    <meta name="description" content="Grynos helps businesses scale with custom AI automation, modern web development, and growth strategy. Build smarter, grow faster.">
+    <meta name="author" content="Grynos">
+    <!-- Open Graph -->
+    <meta property="og:title" content="Grynos | Helping People with AI">
+    <meta property="og:description" content="Custom AI automation, modern web development, and growth strategy to help your business scale.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://grynos.com">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Grynos | Helping People with AI">
+    <meta name="twitter:description" content="Custom AI automation, modern web development, and growth strategy to help your business scale.">
+    <meta property="og:image" content="https://grynos.com/og-image.png">
+    <meta name="twitter:image" content="https://grynos.com/og-image.png">
+    <link rel="canonical" href="https://grynos.com">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="keywords" content="AI automation, web development, micro SaaS, e-commerce, business growth, Philippines, AI consultant">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ProfessionalService",
+        "name": "Grynos",
+        "url": "https://grynos.com",
+        "description": "Custom AI automation, modern web development, and growth strategy to help your business scale.",
+        "serviceType": ["AI Automation", "Web Development", "Micro SaaS", "E-commerce", "Growth Strategy"],
+        "areaServed": "Worldwide"
+    }
+    </script>
+    <style>
+        /* Modern CSS Reset and Base Styles */
+        :root {
+            /* Light, warm, friendly theme */
+            --bg-color: #fcfbf7;
+            --text-main: #1f2937;
+            /* Dark cool gray for text readability */
+            --text-muted: #4b5563;
+            --accent-1: #fbbf24;
+            /* Warm friendly yellow */
+            --accent-2: #f59e0b;
+            /* Amber/Orange */
+            --accent-3: #14b8a6;
+            /* Teal accent */
+
+            /* Glassmorphism optimized for light mode */
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-shadow: rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            cursor: none;
+            /* Custom cursor */
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+            min-height: 100vh;
+            scroll-behavior: smooth;
+        }
+
+        /* WebGL/Canvas Background */
+        #interactive-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Custom Cursor */
+        .cursor-dot,
+        .cursor-halo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-2);
+            box-shadow: 0 0 10px var(--accent-1);
+        }
+
+        .cursor-halo {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(245, 158, 11, 0.6);
+            transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .cursor-halo.active {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(251, 191, 36, 0.1);
+            border-color: var(--accent-2);
+            backdrop-filter: blur(2px);
+        }
+
+        /* Navbar */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
+            transition: padding 0.3s ease, background 0.3s ease, box-shadow 0.3s;
+        }
+
+        nav.scrolled {
+            padding: 1rem 5%;
+            background: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .logo span {
+            background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: color 0.3s, text-shadow 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-2);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.9rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+            color: #111;
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.5);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--text-main);
+            border: 1px solid var(--text-muted);
+        }
+
+        .btn-secondary:hover {
+            background: #f3f4f6;
+            transform: translateY(-3px);
+            border-color: var(--accent-2);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 5%;
+            position: relative;
+            padding-top: 5rem;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60vw;
+            height: 60vw;
+            background: radial-gradient(circle, rgba(251, 191, 36, 0.15) 0%, transparent 60%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            background: white;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--accent-2);
+            margin-bottom: 2rem;
+            animation: fadeInDown 1s ease forwards;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+        }
+
+        .badge i {
+            animation: pulseGlow 2s infinite;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 6vw, 5.5rem);
+            line-height: 1.1;
+            font-weight: 800;
+            max-width: 1000px;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+            animation: fadeInUp 1s ease forwards 0.2s;
+            opacity: 0;
+            position: relative;
+        }
+
+        .text-gradient {
+            background: linear-gradient(to right, var(--accent-2), var(--accent-1), var(--accent-3));
+            background-size: 300% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientMove 5s ease infinite alternate;
+        }
+
+        .hero p {
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            color: var(--text-muted);
+            max-width: 650px;
+            margin-bottom: 3.5rem;
+            line-height: 1.6;
+            animation: fadeInUp 1s ease forwards 0.4s;
+            opacity: 0;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1.2rem;
+            animation: fadeInUp 1s ease forwards 0.6s;
+            opacity: 0;
+        }
+
+        /* Services Section */
+        .services {
+            padding: 10rem 5%;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-subtitle {
+            color: var(--accent-2);
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            perspective: 1000px;
+        }
+
+        .service-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: all 0.5s ease;
+            backdrop-filter: blur(20px);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px var(--glass-shadow);
+        }
+
+        .service-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+        }
+
+        .service-card:hover {
+            border-color: rgba(245, 158, 11, 0.3);
+            transform: translateY(-10px) rotateX(2deg) rotateY(2deg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08),
+                0 0 40px rgba(251, 191, 36, 0.1) inset;
+        }
+
+        .service-card:hover::after {
+            opacity: 1;
+        }
+
+        .icon-wrapper {
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            background: white;
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--accent-2);
+            transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .service-card:hover .icon-wrapper {
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            color: white;
+            transform: scale(1.1) translateZ(20px);
+            border-color: transparent;
+        }
+
+        .service-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.2rem;
+            font-weight: 700;
+            transition: transform 0.5s ease;
+            color: var(--text-main);
+        }
+
+        .service-card:hover h3 {
+            transform: translateZ(30px);
+        }
+
+        .service-card p {
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            flex-grow: 1;
+            transition: transform 0.5s ease;
+        }
+
+        .service-card:hover p {
+            transform: translateZ(20px);
+        }
+
+        .feature-list {
+            list-style: none;
+            transition: transform 0.5s ease;
+        }
+
+        .service-card:hover .feature-list {
+            transform: translateZ(10px);
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.8rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .feature-list li i {
+            color: var(--accent-2);
+            font-size: 0.8rem;
+        }
+
+        /* Demo Concept Section */
+        .concept-section {
+            padding: 8rem 5%;
+        }
+
+        .diff-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .diff-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 10px 30px var(--glass-shadow);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .diff-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 0;
+            background: linear-gradient(180deg, var(--accent-1), var(--accent-2));
+            border-radius: 0 2px 2px 0;
+            transition: height 0.4s ease;
+        }
+
+        .diff-card:hover::before {
+            height: 100%;
+        }
+
+        .diff-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(245, 158, 11, 0.25);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        .diff-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(245, 158, 11, 0.08));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            color: var(--accent-2);
+            margin-bottom: 1.5rem;
+            transition: all 0.4s ease;
+        }
+
+        .diff-card:hover .diff-icon {
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            color: white;
+            transform: scale(1.08);
+        }
+
+        .diff-card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 0.6rem;
+        }
+
+        .diff-card .diff-highlight {
+            display: inline-block;
+            font-weight: 700;
+            color: var(--accent-2);
+        }
+
+        .diff-card p {
+            color: var(--text-muted);
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+
+        /* Contact Form Overlay */
+        .contact-section {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 300;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .contact-section.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .contact-container {
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 4rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12);
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+
+        .contact-section.active .contact-container {
+            transform: scale(1) translateY(0);
+        }
+
+        .contact-close {
+            position: absolute;
+            top: 1.2rem;
+            right: 1.2rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        .contact-close:hover {
+            background: var(--accent-2);
+            color: white;
+            border-color: transparent;
+        }
+
+        .contact-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .contact-header h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: var(--text-main);
+            margin-bottom: 1rem;
+        }
+
+        .contact-header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 2.5rem;
+        }
+
+        .form-group h3 {
+            font-size: 1.3rem;
+            color: var(--text-main);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .form-group h3 span {
+            color: var(--accent-2);
+            margin-right: 0.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            color: var(--text-main);
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-2);
+            box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1);
+            background: white;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Custom Checkboxes and Radios */
+        .custom-option {
+            display: block;
+            position: relative;
+            padding-left: 2.5rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            font-size: 1rem;
+            color: var(--text-muted);
+            user-select: none;
+            transition: color 0.3s ease;
+        }
+
+        .custom-option:hover {
+            color: var(--text-main);
+        }
+
+        .custom-option input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 24px;
+            width: 24px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 2px solid rgba(0, 0, 0, 0.15);
+            border-radius: 6px;
+            /* Box for checkbox */
+            transition: all 0.3s ease;
+        }
+
+        .custom-option.radio .checkmark {
+            border-radius: 50%;
+            /* Circle for radio */
+        }
+
+        .custom-option:hover input~.checkmark {
+            border-color: var(--accent-1);
+        }
+
+        .custom-option input:checked~.checkmark {
+            background-color: var(--accent-2);
+            border-color: var(--accent-2);
+        }
+
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        .custom-option input:checked~.checkmark:after {
+            display: block;
+        }
+
+        /* Checkbox checkmark icon */
+        .custom-option:not(.radio) .checkmark:after {
+            left: 7px;
+            top: 3px;
+            width: 6px;
+            height: 12px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        /* Radio inner circle */
+        .custom-option.radio .checkmark:after {
+            top: 6px;
+            left: 6px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: white;
+        }
+
+        .form-hint {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.2rem;
+            margin-bottom: 0.8rem;
+            opacity: 0.8;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 4rem 5%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            background: white;
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .social-links a {
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--accent-2);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            width: 100%;
+            max-width: 1200px;
+            text-align: center;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            padding-top: 2rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes gradientMove {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes pulseGlow {
+            0% {
+                text-shadow: 0 0 5px var(--accent-1);
+                opacity: 0.8;
+            }
+
+            50% {
+                text-shadow: 0 0 15px var(--accent-1);
+                opacity: 1;
+            }
+
+            100% {
+                text-shadow: 0 0 5px var(--accent-1);
+                opacity: 0.8;
+            }
+        }
+
+        /* Hamburger Button */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            width: 36px;
+            height: 36px;
+            background: none;
+            border: none;
+            padding: 4px;
+            z-index: 201;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 100%;
+            height: 2.5px;
+            background: var(--accent-2);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: translateY(7.5px) rotate(45deg);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: translateY(-7.5px) rotate(-45deg);
+        }
+
+        /* Mobile Menu Overlay */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(252, 251, 247, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(30px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .mobile-menu.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateX(0);
+        }
+
+        .mobile-menu a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 600;
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--accent-2);
+            background: rgba(245, 158, 11, 0.08);
+        }
+
+        .mobile-menu .btn-primary {
+            margin-top: 1rem;
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* My Approach Section */
+        .approach-section {
+            padding: 8rem 5%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .approach-panel {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 5rem 4rem;
+            max-width: 900px;
+            text-align: center;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.05);
+        }
+
+        .approach-panel::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 150px;
+            height: 150px;
+            background: var(--accent-1);
+            filter: blur(80px);
+            opacity: 0.5;
+            border-radius: 50%;
+        }
+
+        .approach-panel::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: var(--accent-3);
+            filter: blur(80px);
+            opacity: 0.3;
+            border-radius: 50%;
+        }
+
+        .approach-panel h2 {
+            font-size: 2.8rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+            color: var(--text-main);
+        }
+
+        .approach-panel p {
+            color: var(--text-muted);
+            font-size: 1.25rem;
+            line-height: 1.8;
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Portfolio Modal */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .portfolio-card {
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+        }
+
+        .portfolio-card:hover {
+            border-color: var(--accent-2);
+            box-shadow: 0 8px 24px rgba(245, 158, 11, 0.12);
+            transform: translateY(-4px);
+        }
+
+        .portfolio-card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(245, 158, 11, 0.08));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: var(--accent-2);
+            margin: 0 auto 1rem;
+        }
+
+        .portfolio-card h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 0.4rem;
+        }
+
+        .portfolio-card p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .portfolio-card .portfolio-tag {
+            display: inline-block;
+            margin-top: 0.8rem;
+            padding: 0.25rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--accent-2);
+        }
+
+        /* Service Modal */
+        .service-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 300;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .service-modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .service-modal {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 3rem;
+            max-width: 700px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12);
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+
+        .service-modal-overlay.active .service-modal {
+            transform: scale(1) translateY(0);
+        }
+
+        .service-modal-close {
+            position: absolute;
+            top: 1.2rem;
+            right: 1.2rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            transition: all 0.3s ease;
+        }
+
+        .service-modal-close:hover {
+            background: var(--accent-2);
+            color: white;
+            border-color: transparent;
+        }
+
+        .service-modal-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-modal h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 0.8rem;
+        }
+
+        .service-modal .modal-desc {
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            font-size: 1.05rem;
+        }
+
+        .rate-card {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .rate-tier {
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .rate-tier:hover {
+            border-color: var(--accent-2);
+            box-shadow: 0 8px 24px rgba(245, 158, 11, 0.12);
+            transform: translateY(-4px);
+        }
+
+        .rate-tier.featured {
+            border-color: var(--accent-2);
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.08), rgba(245, 158, 11, 0.04));
+        }
+
+        .rate-tier-name {
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-2);
+            margin-bottom: 0.5rem;
+        }
+
+        .rate-tier-price {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 0.3rem;
+        }
+
+        .rate-original-price {
+            text-decoration: line-through;
+            opacity: 0.45;
+            font-size: 0.85em;
+        }
+
+        .rate-free-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            font-size: 0.75em;
+            font-weight: 800;
+            padding: 0.15em 0.6em;
+            border-radius: 6px;
+            letter-spacing: 0.05em;
+            vertical-align: middle;
+        }
+
+        .rate-half-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            color: white;
+            font-size: 0.75em;
+            font-weight: 800;
+            padding: 0.15em 0.6em;
+            border-radius: 6px;
+            letter-spacing: 0.05em;
+            vertical-align: middle;
+        }
+
+        .rate-tier-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .service-modal .modal-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .service-modal .modal-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.7rem;
+            font-size: 0.95rem;
+        }
+
+        .service-modal .modal-features li i {
+            color: var(--accent-2);
+            font-size: 0.8rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            nav > .btn-secondary {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hero {
+                padding-top: 6rem;
+                min-height: 85vh;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+                margin-bottom: 2rem;
+            }
+
+            .cta-group {
+                flex-direction: column;
+                width: 100%;
+                gap: 0.8rem;
+            }
+
+            .cta-group .btn {
+                width: 100%;
+            }
+
+            .services {
+                padding: 5rem 5%;
+            }
+
+            .services-grid {
+                gap: 1.5rem;
+            }
+
+            .service-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .concept-section {
+                padding: 4rem 5%;
+            }
+
+            .diff-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .diff-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .approach-section {
+                padding: 4rem 5%;
+            }
+
+            .approach-panel {
+                padding: 2.5rem 1.5rem;
+            }
+
+            .approach-panel h2 {
+                font-size: 1.8rem;
+            }
+
+            .approach-panel p {
+                font-size: 1rem;
+                margin-bottom: 2rem;
+            }
+
+            .contact-section {
+                padding: 0;
+                align-items: flex-end;
+            }
+
+            .contact-container {
+                padding: 2.5rem 1.5rem;
+                max-height: 95vh;
+                border-radius: 20px 20px 0 0;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .footer-top {
+                flex-direction: column;
+                gap: 2rem;
+                text-align: center;
+            }
+
+            /* Fallback cursor for mobile */
+            * {
+                cursor: auto !important;
+            }
+
+            .cursor-dot,
+            .cursor-halo {
+                display: none !important;
+            }
+
+            .service-modal-overlay {
+                padding: 1rem;
+                align-items: flex-end;
+            }
+
+            .service-modal {
+                padding: 2rem 1.5rem;
+                max-height: 90vh;
+                border-radius: 20px 20px 0 0;
+            }
+
+            .rate-card {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+</head>
+
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-halo" id="cursor-halo"></div>
+
+    <!-- Background Canvas -->
+    <canvas id="interactive-bg"></canvas>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="logo">
+            <i class="fa-solid fa-earth-asia"></i><span>Grynos</span>
+        </div>
+        <div class="nav-links">
+            <a href="#services" class="hover-target">My Services</a>
+            <a href="#concept" class="hover-target">My Approach</a>
+            <a href="#contact" class="hover-target">Contact Me</a>
+        </div>
+        <a href="#contact" class="btn btn-secondary hover-target">Let's Talk</a>
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="#services">My Services</a>
+        <a href="#concept">My Approach</a>
+        <a href="#contact">Contact Me</a>
+        <a href="#contact" class="btn btn-primary">Let's Talk <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="badge">
+            <i class="fa-solid fa-sun"></i> Your AI Partner
+        </div>
+        <div id="hero-message-container" class="hover-target" title="Click to change message"
+            style="user-select: none; transition: all 0.3s ease; padding-bottom: 2rem; display: flex; flex-direction: column; align-items: center; width: 100%;">
+            <h1 id="hero-title">Empowering Teams. <span class="text-gradient">Scaling Impact.</span></h1>
+            <p id="hero-subtitle" style="margin: 0 auto;">AI shouldn't replace people; it should give them their time
+                back. I build intelligent solutions that handle the heavy lifting, so you and your team can focus on the
+                work that truly matters.</p>
+        </div>
+        <div class="cta-group">
+            <a href="#" id="view-work-btn" class="btn btn-primary hover-target">
+                View My Work <i class="fa-solid fa-arrow-right"></i>
+            </a>
+            <a href="#concept" class="btn btn-secondary hover-target">
+                Why Grynos?
+            </a>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="section-header">
+            <span class="section-subtitle">What I Do</span>
+            <h2 class="section-title">Bringing AI to Your Business</h2>
+        </div>
+
+        <div class="services-grid">
+            <!-- Service 1 -->
+            <div class="service-card hover-target">
+                <div class="icon-wrapper">
+                    <i class="fa-solid fa-users-rays"></i>
+                </div>
+                <h3>AI Workflows & Micro SaaS</h3>
+                <p>I build custom AI solutions and micro SaaS products that integrate into your daily operations — from process automation to focused software tools that solve one problem really well.</p>
+                <ul class="feature-list">
+                    <li><i class="fa-solid fa-check"></i> Process Automation</li>
+                    <li><i class="fa-solid fa-check"></i> Custom API Integrations</li>
+                    <li><i class="fa-solid fa-check"></i> Micro SaaS Development</li>
+                    <li><i class="fa-solid fa-check"></i> MVP to Launch Pipeline</li>
+                </ul>
+            </div>
+
+            <!-- Service 2 -->
+            <div class="service-card hover-target">
+                <div class="icon-wrapper">
+                    <i class="fa-solid fa-store"></i>
+                </div>
+                <h3>Modern Web & E-commerce</h3>
+                <p>I build high-performance digital storefronts and websites that act as your 24/7 sales partner. With a
+                    focus on fast setup and seamless user experience, I help you get your business online and scaling
+                    without the technical stress.</p>
+                <ul class="feature-list">
+                    <li><i class="fa-solid fa-check"></i> Rapid Deployment & Setup</li>
+                    <li><i class="fa-solid fa-check"></i> Custom Web Development</li>
+                    <li><i class="fa-solid fa-check"></i> E-commerce Architecture</li>
+                    <li><i class="fa-solid fa-check"></i> Payment & Inventory Automation</li>
+                </ul>
+            </div>
+
+            <!-- Service 3 -->
+            <div class="service-card hover-target">
+                <div class="icon-wrapper">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+                <h3>Growth & Strategy</h3>
+                <p>I work directly with you to identify bottlenecks in your current system and map out a safe, effective
+                    transition to automated workflows.</p>
+                <ul class="feature-list">
+                    <li><i class="fa-solid fa-check"></i> 1-on-1 Consultations</li>
+                    <li><i class="fa-solid fa-check"></i> Tech Stack Audits</li>
+                    <li><i class="fa-solid fa-check"></i> Implementation Roadmaps</li>
+                    <li><i class="fa-solid fa-check"></i> Ongoing Technical Support</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Grynos Section -->
+    <section class="concept-section" id="concept">
+        <div class="section-header">
+            <span class="section-subtitle">The Grynos Difference</span>
+            <h2 class="section-title">What Makes Me Different?</h2>
+        </div>
+
+        <div class="diff-grid">
+            <div class="diff-card hover-target">
+                <div class="diff-icon">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <h3>QA Certified</h3>
+                <p>Every project undergoes a rigorous <span class="diff-highlight">Multi-Point Quality Assurance</span> check before delivery. If it's not perfect, it doesn't ship.</p>
+            </div>
+
+            <div class="diff-card hover-target">
+                <div class="diff-icon">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <h3>Secured by Design</h3>
+                <p>Your site is <span class="diff-highlight">Penetration Tested</span> for vulnerabilities by default. I bake enterprise-grade security into your build at no extra cost.</p>
+            </div>
+
+            <div class="diff-card hover-target">
+                <div class="diff-icon">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <h3>AI-Driven Efficiency</h3>
+                <p>By leveraging <span class="diff-highlight">Advanced AI Workflows</span>, I deliver high-end results in half the time—passing those direct cost savings on to you.</p>
+            </div>
+
+            <div class="diff-card hover-target">
+                <div class="diff-icon">
+                    <i class="fa-solid fa-infinity"></i>
+                </div>
+                <h3>Post-Launch Partner</h3>
+                <p>I don't disappear after deployment. You get <span class="diff-highlight">Committed Support</span> to ensure your AI tools continue to run smoothly as you grow.</p>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 4rem;">
+            <a href="#contact" class="btn btn-primary hover-target">Start a Project Together <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+    </section>
+
+    <!-- My Approach Section -->
+    <section class="approach-section">
+        <div class="approach-panel">
+            <h2>Technology with a Human Heart</h2>
+            <p>Technology can feel cold and impersonal on its own. But without it, even the most brilliant ideas move too slowly. I believe the best solutions live at the intersection of human creativity and AI-driven speed.</p>
+            <p style="margin-bottom: 0;">I don't just write code; I build partnerships. My goal is to help you scale your business into the next decade by making your workflows smoother, faster, and more intuitive. Let's scale with purpose. Let's scale with joy.</p>
+            <div style="margin-top: 3rem;">
+                <a href="#contact" class="btn btn-primary hover-target">Start a Project Together</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section" id="contact">
+        <div class="contact-container">
+            <button class="contact-close" id="contact-close" aria-label="Close form">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="contact-header">
+                <h2>Let’s Scale Your Vision 🚀</h2>
+                <p>I’m here to handle the technology so you can focus on your growth. Tell me about your project, and
+                    let’s see how we can build something great together.</p>
+            </div>
+
+            <form id="contact-form" name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field">
+                <input type="hidden" name="form-name" value="contact">
+                <p style="display:none"><label>Don't fill this out: <input name="bot-field"></label></p>
+                <!-- Section 1: The Basics -->
+                <div class="form-group">
+                    <h3><span>1.</span> The Basics</h3>
+                    <div class="form-row">
+                        <div>
+                            <label class="form-label">Name</label>
+                            <input type="text" name="name" class="form-control" placeholder="John Doe" required>
+                        </div>
+                        <div>
+                            <label class="form-label">Email Address</label>
+                            <input type="email" name="email" class="form-control" placeholder="john@company.com" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="form-label">Business Name or Website <span
+                                style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">(If
+                                applicable)</span></label>
+                        <input type="text" name="business" class="form-control" placeholder="www.yourcompany.com">
+                    </div>
+                </div>
+
+                <!-- Section 2: Your Project Goals -->
+                <div class="form-group">
+                    <h3><span>2.</span> Your Project Goals</h3>
+                    <label class="form-label">What can I help you build?</label>
+                    <span class="form-hint">Select all that apply</span>
+
+                    <label class="custom-option">
+                        Custom Web Development (The Essential / Growth / Flagship)
+                        <input type="checkbox" name="goals" value="web_dev">
+                        <span class="checkmark"></span>
+                    </label>
+
+                    <label class="custom-option">
+                        E-commerce Engine (The Boutique / Marketplace / Enterprise)
+                        <input type="checkbox" name="goals" value="ecommerce">
+                        <span class="checkmark"></span>
+                    </label>
+
+                    <label class="custom-option">
+                        AI Automation & Chatbots (The Concierge / Sales Pro / Strategist)
+                        <input type="checkbox" name="goals" value="ai_automation">
+                        <span class="checkmark"></span>
+                    </label>
+
+                    <label class="custom-option">
+                        Full Digital Transformation (Web + AI Bundle)
+                        <input type="checkbox" name="goals" value="full_transformation">
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+
+                <!-- Section 3: Tech Headache -->
+                <div class="form-group">
+                    <h3><span>3.</span> Your Biggest "Tech Headache"</h3>
+                    <label class="form-label">What is holding you back right now?</label>
+                    <span class="form-hint">e.g., "I'm spending too much time on manual tasks" or "I need a site that
+                        actually converts."</span>
+                    <textarea name="challenge" class="form-control" placeholder="Tell me about your current challenges..."
+                        required></textarea>
+                </div>
+
+                <!-- Section 4: Logistics & Investment -->
+                <div class="form-group">
+                    <h3><span>4.</span> Logistics & Investment</h3>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <label class="form-label">Target Launch Date</label>
+                        <span class="form-hint">e.g., Within 2 weeks, 1 month, or just exploring</span>
+                        <input type="text" name="timeline" class="form-control" placeholder="I'm aiming for..." required>
+                    </div>
+
+                    <div>
+                        <label class="form-label">Ideal Investment Range</label>
+
+                        <label class="custom-option radio">
+                            ₱20,000 – ₱40,000
+                            <input type="radio" name="budget" value="20-40" required>
+                            <span class="checkmark"></span>
+                        </label>
+
+                        <label class="custom-option radio">
+                            ₱40,000 – ₱70,000
+                            <input type="radio" name="budget" value="40-70">
+                            <span class="checkmark"></span>
+                        </label>
+
+                        <label class="custom-option radio">
+                            ₱70,000+
+                            <input type="radio" name="budget" value="70+">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Section 5: Final Thoughts -->
+                <div class="form-group" style="margin-bottom: 3rem;">
+                    <h3><span>5.</span> Final Thoughts</h3>
+                    <label class="form-label">Anything else I should know about your vision?</label>
+                    <textarea name="notes" class="form-control"
+                        placeholder="Any specific features, inspirations, or questions?"></textarea>
+                </div>
+
+                <div style="text-align: center;">
+                    <button type="submit" class="btn btn-primary hover-target"
+                        style="padding: 1.2rem 3rem; font-size: 1.1rem; width: 100%;">
+                        Launch Your Vision <i class="fa-solid fa-rocket" style="margin-left: 0.5rem;"></i>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Success Message (Hidden by default) -->
+            <div id="success-message"
+                style="display: none; text-align: center; padding: 3rem 2rem; background: rgba(251, 191, 36, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 20px; animation: fadeInUp 0.5s ease;">
+                <i class="fa-solid fa-circle-check"
+                    style="font-size: 4rem; color: var(--accent-2); margin-bottom: 1.5rem;"></i>
+                <h3 style="font-size: 2rem; color: var(--text-main); margin-bottom: 1rem;">Salamat!</h3>
+                <p
+                    style="font-size: 1.1rem; color: var(--text-muted); line-height: 1.6; max-width: 500px; margin: 0 auto;">
+                    I’ve received your details. I’ll review your goals and get back to you within 24–48 hours so we can
+                    start scaling joyfully.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Modal -->
+    <div class="service-modal-overlay" id="portfolio-modal-overlay">
+        <div class="service-modal">
+            <button class="service-modal-close" id="portfolio-modal-close" aria-label="Close modal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="service-modal-icon">
+                <i class="fa-solid fa-briefcase"></i>
+            </div>
+            <h3>My Work</h3>
+            <p class="modal-desc">A selection of projects I've built for clients. Click any project to view it live.</p>
+            <div class="portfolio-grid" id="portfolio-grid"></div>
+            <div style="text-align: center;">
+                <a href="#" class="btn btn-primary hover-target" onclick="event.preventDefault(); document.getElementById('portfolio-modal-overlay').classList.remove('active'); document.body.style.overflow = '';">
+                    Close
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Service Modal -->
+    <div class="service-modal-overlay" id="service-modal-overlay">
+        <div class="service-modal">
+            <button class="service-modal-close" id="service-modal-close" aria-label="Close modal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="service-modal-icon" id="modal-icon"></div>
+            <h3 id="modal-title"></h3>
+            <p class="modal-desc" id="modal-desc"></p>
+            <div class="rate-card" id="modal-rates"></div>
+            <ul class="modal-features" id="modal-features"></ul>
+            <div style="text-align: center;">
+                <a href="#contact" class="btn btn-primary hover-target" id="modal-cta">
+                    Get Started <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-top">
+            <div class="logo">
+                <i class="fa-solid fa-earth-asia"></i><span>Grynos</span>
+            </div>
+            <div class="social-links">
+                <a href="#" class="hover-target"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="#" class="hover-target"><i class="fa-brands fa-twitter"></i></a>
+                <a href="#" class="hover-target"><i class="fa-brands fa-youtube"></i></a>
+                <a href="#" class="hover-target"><i class="fa-brands fa-facebook"></i></a>
+                <a href="#" class="hover-target"><i class="fa-brands fa-instagram"></i></a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Grynos. Empowering you through AI.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- Custom Cursor ---
+            const cursorDot = document.getElementById('cursor-dot');
+            const cursorHalo = document.getElementById('cursor-halo');
+            const hoverTargets = document.querySelectorAll('.hover-target, a, button');
+
+            window.addEventListener('mousemove', (e) => {
+                const posX = e.clientX;
+                const posY = e.clientY;
+
+                cursorDot.style.left = `${posX}px`;
+                cursorDot.style.top = `${posY}px`;
+
+                cursorHalo.animate({
+                    left: `${posX}px`,
+                    top: `${posY}px`
+                }, { duration: 400, fill: "forwards" });
+            });
+
+            hoverTargets.forEach(target => {
+                target.addEventListener('mouseenter', () => {
+                    cursorHalo.classList.add('active');
+                    cursorDot.style.transform = "translate(-50%, -50%) scale(0.5)";
+                });
+
+                target.addEventListener('mouseleave', () => {
+                    cursorHalo.classList.remove('active');
+                    cursorDot.style.transform = "translate(-50%, -50%) scale(1)";
+                });
+            });
+
+            // --- Hero Message Looper ---
+            const heroMessages = [
+                {
+                    title: 'Empowering Teams. <span class="text-gradient">Scaling Impact.</span>',
+                    subtitle: "AI shouldn't replace people; it should give them their time back. I build intelligent solutions that handle the heavy lifting, so you and your team can focus on the work that truly matters."
+                },
+                {
+                    title: 'Scaling Intelligence. <span class="text-gradient">Accelerating Growth.</span>',
+                    subtitle: "I help businesses outpace the competition by integrating custom AI solutions that turn manual bottlenecks into automated scale."
+                },
+                {
+                    title: 'Helping People <span class="text-gradient">with AI</span>',
+                    subtitle: "AI can be intimidating, but it doesn't have to be. I help people and businesses harness the power of automation to grow faster, work smarter, and scale without the stress."
+                },
+                {
+                    title: 'AI Built for People, <span class="text-gradient">Not Just Platforms.</span>',
+                    subtitle: "I help founders and teams reclaim their time by turning complex AI into simple, scalable tools that do the heavy lifting for you."
+                }
+            ];
+
+            let currentMessageIndex = 0;
+            const heroContainer = document.getElementById('hero-message-container');
+            const heroTitle = document.getElementById('hero-title');
+            const heroSubtitle = document.getElementById('hero-subtitle');
+
+            if (heroContainer) {
+                heroContainer.addEventListener('click', () => {
+                    // Fade out
+                    heroContainer.style.opacity = '0';
+                    heroContainer.style.transform = 'translateY(10px)';
+
+                    setTimeout(() => {
+                        // Update text
+                        currentMessageIndex = (currentMessageIndex + 1) % heroMessages.length;
+                        heroTitle.innerHTML = heroMessages[currentMessageIndex].title;
+                        heroSubtitle.innerText = heroMessages[currentMessageIndex].subtitle;
+
+                        // Fade in
+                        heroContainer.style.opacity = '1';
+                        heroContainer.style.transform = 'translateY(0)';
+                    }, 300);
+                });
+            }
+
+            // --- Navbar Scroll Effect ---
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            // --- Mobile Hamburger Menu ---
+            const hamburger = document.getElementById('hamburger');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = mobileMenu.querySelectorAll('a');
+
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
+                document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+            });
+
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburger.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+                    hamburger.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+
+            // --- Portfolio Modal ---
+            const portfolioProjects = [
+                {
+                    icon: 'fa-solid fa-robot',
+                    title: 'AI Chatbot Platform',
+                    desc: 'Custom chatbot for a retail brand',
+                    tag: 'AI Automation',
+                    url: '#'
+                },
+                {
+                    icon: 'fa-solid fa-cart-shopping',
+                    title: 'E-commerce Store',
+                    desc: 'Full online store with payment integration',
+                    tag: 'Web + E-commerce',
+                    url: '#'
+                },
+                {
+                    icon: 'fa-solid fa-gauge-high',
+                    title: 'Business Dashboard',
+                    desc: 'Real-time analytics dashboard for a startup',
+                    tag: 'Web Development',
+                    url: '#'
+                },
+                {
+                    icon: 'fa-solid fa-gears',
+                    title: 'Workflow Automation',
+                    desc: 'Automated invoicing & scheduling system',
+                    tag: 'AI Automation',
+                    url: '#'
+                },
+                {
+                    icon: 'fa-solid fa-globe',
+                    title: 'Portfolio Website',
+                    desc: 'Modern portfolio for a creative agency',
+                    tag: 'Web Development',
+                    url: '#'
+                },
+                {
+                    icon: 'fa-solid fa-bullhorn',
+                    title: 'Marketing Landing Page',
+                    desc: 'High-conversion landing page for SaaS',
+                    tag: 'Growth Strategy',
+                    url: '#'
+                }
+            ];
+
+            const portfolioOverlay = document.getElementById('portfolio-modal-overlay');
+            const portfolioClose = document.getElementById('portfolio-modal-close');
+            const portfolioGrid = document.getElementById('portfolio-grid');
+            const viewWorkBtn = document.getElementById('view-work-btn');
+
+            // Render portfolio cards
+            portfolioGrid.innerHTML = portfolioProjects.map(p => `
+                <a href="${p.url}" class="portfolio-card hover-target" target="_blank" rel="noopener">
+                    <div class="portfolio-card-icon"><i class="${p.icon}"></i></div>
+                    <h4>${p.title}</h4>
+                    <p>${p.desc}</p>
+                    <span class="portfolio-tag">${p.tag}</span>
+                </a>
+            `).join('');
+
+            function openPortfolio() {
+                portfolioOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closePortfolio() {
+                portfolioOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            viewWorkBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                openPortfolio();
+            });
+
+            portfolioClose.addEventListener('click', closePortfolio);
+            portfolioOverlay.addEventListener('click', (e) => {
+                if (e.target === portfolioOverlay) closePortfolio();
+            });
+
+            // --- Contact Form Overlay ---
+            const contactSection = document.getElementById('contact');
+            const contactClose = document.getElementById('contact-close');
+            const contactLinks = document.querySelectorAll('a[href="#contact"]');
+
+            function openContact() {
+                contactSection.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeContact() {
+                contactSection.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            contactLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    // Close service modal if open
+                    if (document.getElementById('service-modal-overlay').classList.contains('active')) {
+                        document.getElementById('service-modal-overlay').classList.remove('active');
+                    }
+                    // Close mobile menu if open
+                    if (mobileMenu.classList.contains('active')) {
+                        hamburger.classList.remove('active');
+                        mobileMenu.classList.remove('active');
+                    }
+                    openContact();
+                });
+            });
+
+            contactClose.addEventListener('click', closeContact);
+            contactSection.addEventListener('click', (e) => {
+                if (e.target === contactSection) closeContact();
+            });
+
+            // --- Contact Form Submission (Netlify Forms) ---
+            const contactForm = document.getElementById('contact-form');
+            const successMessage = document.getElementById('success-message');
+
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const formData = new FormData(contactForm);
+
+                fetch('/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams(formData).toString()
+                })
+                .then(() => {
+                    contactForm.style.display = 'none';
+                    successMessage.style.display = 'block';
+                })
+                .catch(() => {
+                    contactForm.style.display = 'none';
+                    successMessage.style.display = 'block';
+                });
+            });
+
+            // --- Service Card Modal ---
+            const serviceData = [
+                {
+                    icon: 'fa-solid fa-users-rays',
+                    title: 'AI Workflows & Micro SaaS',
+                    desc: 'I build custom AI solutions and micro SaaS products that integrate into your daily operations — from process automation to focused software tools that solve one problem really well. Whether it\'s a tailored AI co-pilot or a lean SaaS MVP, I design systems that save you hours every week.',
+                    features: ['Process Automation', 'Custom API Integrations', 'Micro SaaS Development', 'MVP to Launch Pipeline', 'Subscription & Billing Setup', 'Workflow Optimization'],
+                    rates: [
+                        { name: 'Starter', price: '₱25,000', desc: 'Single workflow automation with basic integrations', featured: false, discount: 'free' },
+                        { name: 'Growth', price: '₱45,000', desc: 'Multi-process automation, micro SaaS MVP, or custom AI co-pilot', featured: true, discount: 'half' },
+                        { name: 'Enterprise', price: '₱80,000+', desc: 'Full-scale intelligent system with ongoing support', featured: false }
+                    ]
+                },
+                {
+                    icon: 'fa-solid fa-store',
+                    title: 'Modern Web & E-commerce',
+                    desc: 'I build high-performance digital storefronts and websites that act as your 24/7 sales partner. With a focus on fast setup and seamless user experience, I help you get your business online and scaling without the technical stress.',
+                    features: ['Rapid Deployment & Setup', 'Custom Web Development', 'E-commerce Architecture', 'Payment & Inventory Automation', 'SEO Optimization', 'Mobile-First Design'],
+                    rates: [
+                        { name: 'Essential', price: '₱20,000', desc: 'Professional landing page or portfolio site', featured: false, discount: 'free' },
+                        { name: 'Business', price: '₱50,000', desc: 'Full website with e-commerce & payment integration', featured: true, discount: 'half' },
+                        { name: 'Flagship', price: '₱90,000+', desc: 'Custom-built platform with advanced features', featured: false }
+                    ]
+                },
+                {
+                    icon: 'fa-solid fa-chart-line',
+                    title: 'Growth & Strategy',
+                    desc: 'I work directly with you to identify bottlenecks in your current system and map out a safe, effective transition to automated workflows. Get expert guidance on tech stack decisions and implementation roadmaps.',
+                    features: ['1-on-1 Consultations', 'Tech Stack Audits', 'Implementation Roadmaps', 'Ongoing Technical Support', 'Performance Reviews', 'Scaling Strategy'],
+                    rates: [
+                        { name: 'Consult', price: '₱5,000', desc: 'Single 90-minute deep-dive session', featured: false, discount: 'free' },
+                        { name: 'Advisor', price: '₱15,000/mo', desc: 'Weekly sessions + async support & roadmap', featured: true, discount: 'half' },
+                        { name: 'Partner', price: '₱30,000/mo', desc: 'Dedicated strategic partner with hands-on support', featured: false }
+                    ]
+                }
+            ];
+
+            const modalOverlay = document.getElementById('service-modal-overlay');
+            const modalClose = document.getElementById('service-modal-close');
+            const modalIcon = document.getElementById('modal-icon');
+            const modalTitle = document.getElementById('modal-title');
+            const modalDesc = document.getElementById('modal-desc');
+            const modalRates = document.getElementById('modal-rates');
+            const modalFeatures = document.getElementById('modal-features');
+            const modalCta = document.getElementById('modal-cta');
+
+            function openServiceModal(index) {
+                const data = serviceData[index];
+                modalIcon.innerHTML = `<i class="${data.icon}"></i>`;
+                modalTitle.textContent = data.title;
+                modalDesc.textContent = data.desc;
+
+                modalRates.innerHTML = data.rates.map(r => `
+                    <div class="rate-tier${r.featured ? ' featured' : ''}">
+                        <div class="rate-tier-name">${r.name}</div>
+                        <div class="rate-tier-price">${r.discount === 'free' ? `<span class="rate-original-price">${r.price}</span> <span class="rate-free-badge">FREE</span>` : r.discount === 'half' ? `<span class="rate-original-price">${r.price}</span> <span class="rate-half-badge">50% OFF</span>` : r.price}</div>
+                        <div class="rate-tier-desc">${r.desc}</div>
+                    </div>
+                `).join('');
+
+                modalFeatures.innerHTML = data.features.map(f =>
+                    `<li><i class="fa-solid fa-check"></i> ${f}</li>`
+                ).join('');
+
+                modalOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeServiceModal() {
+                modalOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            const serviceCards = document.querySelectorAll('.service-card');
+            serviceCards.forEach((card, i) => {
+                card.style.cursor = 'pointer';
+                card.addEventListener('click', () => openServiceModal(i));
+            });
+
+            modalClose.addEventListener('click', closeServiceModal);
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) closeServiceModal();
+            });
+            modalCta.addEventListener('click', closeServiceModal);
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    if (portfolioOverlay.classList.contains('active')) closePortfolio();
+                    if (modalOverlay.classList.contains('active')) closeServiceModal();
+                    if (contactSection.classList.contains('active')) closeContact();
+                }
+            });
+
+            // --- Interactive Background (Particles + Connection Lines) - Updated for Light Theme ---
+            const canvas = document.getElementById('interactive-bg');
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            let particles = [];
+
+            let mouse = {
+                x: null,
+                y: null,
+                radius: 150
+            }
+
+            window.addEventListener('mousemove', (e) => {
+                mouse.x = e.clientX;
+                mouse.y = e.clientY;
+            });
+
+            window.addEventListener('mouseout', () => {
+                mouse.x = null;
+                mouse.y = null;
+            });
+
+            function resize() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            }
+
+            window.addEventListener('resize', resize);
+            resize();
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.size = Math.random() * 3.5 + 1;
+                    this.density = (Math.random() * 40) + 5;
+                    this.vx = (Math.random() - 0.5) * 0.6;
+                    this.vy = (Math.random() - 0.5) * 0.6;
+                }
+
+                draw() {
+                    // Brighter core with soft glow
+                    const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size * 2.5);
+                    gradient.addColorStop(0, 'rgba(251, 191, 36, 0.6)');
+                    gradient.addColorStop(0.4, 'rgba(245, 158, 11, 0.3)');
+                    gradient.addColorStop(1, 'rgba(245, 158, 11, 0)');
+                    ctx.fillStyle = gradient;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size * 2.5, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Solid bright center dot
+                    ctx.fillStyle = 'rgba(251, 191, 36, 0.7)';
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size * 0.6, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    if (this.x < 0 || this.x > width) this.vx *= -1;
+                    if (this.y < 0 || this.y > height) this.vy *= -1;
+
+                    if (mouse.x != null) {
+                        let dx = mouse.x - this.x;
+                        let dy = mouse.y - this.y;
+                        let distance = Math.sqrt(dx * dx + dy * dy);
+                        let forceDirectionX = dx / distance;
+                        let forceDirectionY = dy / distance;
+                        let maxDistance = mouse.radius;
+                        let force = (maxDistance - distance) / maxDistance;
+                        let directionX = forceDirectionX * force * this.density;
+                        let directionY = forceDirectionY * force * this.density;
+
+                        if (distance < mouse.radius) {
+                            this.x -= directionX * 0.8;
+                            this.y -= directionY * 0.8;
+                        }
+                    }
+                }
+            }
+
+            mouse.radius = 200;
+
+            function initParticles() {
+                particles = [];
+                let numberOfParticles = (width * height) / 8000;
+                for (let i = 0; i < numberOfParticles; i++) {
+                    particles.push(new Particle());
+                }
+            }
+
+            function animateParticles() {
+                ctx.clearRect(0, 0, width, height);
+
+                // Stronger mouse glow
+                if (mouse.x != null && mouse.y != null) {
+                    let gradient = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 350);
+                    gradient.addColorStop(0, 'rgba(251, 191, 36, 0.2)');
+                    gradient.addColorStop(0.4, 'rgba(245, 158, 11, 0.08)');
+                    gradient.addColorStop(1, 'transparent');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, width, height);
+                }
+
+                for (let i = 0; i < particles.length; i++) {
+                    particles[i].update();
+                    particles[i].draw();
+                }
+
+                connectParticles();
+                requestAnimationFrame(animateParticles);
+            }
+
+            function connectParticles() {
+                for (let a = 0; a < particles.length; a++) {
+                    for (let b = a + 1; b < particles.length; b++) {
+                        let dx = particles[a].x - particles[b].x;
+                        let dy = particles[a].y - particles[b].y;
+                        let distance = dx * dx + dy * dy;
+                        let maxDist = (width / 8) * (height / 8);
+                        if (distance < maxDist) {
+                            let opacity = 1 - (distance / maxDist);
+                            ctx.strokeStyle = `rgba(251, 191, 36, ${opacity * 0.25})`;
+                            ctx.lineWidth = opacity * 1.8;
+                            ctx.beginPath();
+                            ctx.moveTo(particles[a].x, particles[a].y);
+                            ctx.lineTo(particles[b].x, particles[b].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            initParticles();
+            animateParticles();
+
+            // --- 3D Card Tilt Effect ---
+            const cards = document.querySelectorAll('.service-card');
+
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+
+                    const rotateX = ((y - centerY) / centerY) * -10;
+                    const rotateY = ((x - centerX) / centerX) * 10;
+
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
