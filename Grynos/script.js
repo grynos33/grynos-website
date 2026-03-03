@@ -237,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target === contactSection) closeContact();
     });
 
-    // --- Contact Form Submission (Netlify Forms) ---
+    // --- Contact Form Submission (Google Sheets) ---
     const contactForm = document.getElementById('contact-form');
     const successMessage = document.getElementById('success-message');
 
@@ -245,10 +245,22 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         const formData = new FormData(contactForm);
 
-        fetch('/', {
+        const goals = formData.getAll('goals').join(', ');
+
+        const payload = {
+            name: formData.get('name'),
+            email: formData.get('email'),
+            business: formData.get('business'),
+            goals: goals,
+            challenge: formData.get('challenge'),
+            timeline: formData.get('timeline'),
+            budget: formData.get('budget'),
+            notes: formData.get('notes')
+        };
+
+        fetch('https://script.google.com/macros/s/AKfycbxF5V6vC4I9O3ZFw7Cwj26DVXyLTufuhzjOxXCn693z2LgnOe5p3dG8AoLvc2ZqWKbw/exec', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams(formData).toString()
+            body: JSON.stringify(payload)
         })
         .then(() => {
             contactForm.style.display = 'none';
