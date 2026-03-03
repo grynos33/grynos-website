@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://grynos.com/sitemap.xml
+Sitemap: https://grynos.info/sitemap.xml
