@@ -279,12 +279,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         fetch('https://script.google.com/macros/s/AKfycbxF5V6vC4I9O3ZFw7Cwj26DVXyLTufuhzjOxXCn693z2LgnOe5p3dG8AoLvc2ZqWKbw/exec', {
             method: 'POST',
+            mode: 'no-cors',
             body: JSON.stringify(payload)
         })
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error('Network response was not ok');
-                }
+            .then(() => {
+                // mode: 'no-cors' returns an opaque response, which we treat as success
+                // since the network promise resolved (it successfully reached Google).
                 contactForm.style.display = 'none';
                 successMessage.style.display = 'block';
                 contactForm.reset();
@@ -293,8 +293,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 submitBtn.innerHTML = originalBtnText;
             })
             .catch(() => {
+                // Catch only fires on true network failure (offline, DNS error, etc)
                 contactForm.style.display = 'none';
                 errorMessage.style.display = 'block';
+
+                // Restore button state so user can try again from the error screen
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
             });
     });
 
