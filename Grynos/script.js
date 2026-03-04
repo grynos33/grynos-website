@@ -241,10 +241,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const contactForm = document.getElementById('contact-form');
     const successMessage = document.getElementById('success-message');
 
+    const errorMessage = document.getElementById('error-message');
+    const retryBtn = document.getElementById('retry-btn');
+    const submitBtn = contactForm.querySelector('button[type="submit"]');
+
+    if (retryBtn) {
+        retryBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            errorMessage.style.display = 'none';
+            contactForm.style.display = 'block';
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = 'Launch Your Vision <i class="fa-solid fa-rocket" style="margin-left: 0.5rem;"></i>';
+        });
+    }
+
     contactForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        const formData = new FormData(contactForm);
 
+        // Show loading state
+        submitBtn.disabled = true;
+        const originalBtnText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Sending...';
+
+        const formData = new FormData(contactForm);
         const goals = formData.getAll('goals').join(', ');
 
         const payload = {
@@ -262,14 +281,21 @@ document.addEventListener('DOMContentLoaded', () => {
             method: 'POST',
             body: JSON.stringify(payload)
         })
-        .then(() => {
-            contactForm.style.display = 'none';
-            successMessage.style.display = 'block';
-        })
-        .catch(() => {
-            contactForm.style.display = 'none';
-            successMessage.style.display = 'block';
-        });
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                contactForm.style.display = 'none';
+                successMessage.style.display = 'block';
+                contactForm.reset();
+                // Restore button state for future
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
+            })
+            .catch(() => {
+                contactForm.style.display = 'none';
+                errorMessage.style.display = 'block';
+            });
     });
 
     // --- Service Card Modal ---
