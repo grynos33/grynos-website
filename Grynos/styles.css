@@ -1285,6 +1285,17 @@ footer {
 
 /* Responsive */
 @media (max-width: 768px) {
+    .logo {
+        height: 2.5rem;
+        width: 5.5rem;
+    }
+
+    .logo-img {
+        height: 10rem;
+        left: -2.5rem;
+        top: -0.7rem;
+    }
+
     .nav-links {
         display: none;
     }
