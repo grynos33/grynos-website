@@ -129,9 +129,8 @@ nav.scrolled {
     /* Massive scale without warping ANY nav flex boundaries */
     width: auto;
     object-fit: contain;
-    /* No longer need mix-blend-mode: multiply since the image itself is naturally transparent now */
-    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.05));
-    /* Optional subtle shadow to lift it off the background */
+    mix-blend-mode: multiply;
+    filter: contrast(110%) brightness(105%);
 
     transition: transform 0.3s ease, filter 0.3s ease;
 }
@@ -139,7 +138,7 @@ nav.scrolled {
 .logo:hover .logo-img {
     transform: translateY(0.25rem);
     /* Elegant subtle hop entirely preserved */
-    filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.08));
+    filter: contrast(115%) brightness(105%);
 }
 
 .nav-links {
