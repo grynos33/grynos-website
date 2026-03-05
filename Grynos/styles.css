@@ -110,35 +110,57 @@ nav.scrolled {
     margin: 0;
     position: relative;
     height: 3.5rem;
-    /* Exactly lock structural height to standard navbar sizes */
     width: 8rem;
-    /* Reserve appropriate horizontal space for the offset graphic */
 }
 
 .logo:hover {
     opacity: 0.9;
 }
 
+/* Hide the mobile-only emblem on desktop */
+.logo-mobile {
+    display: none;
+}
+
 .logo-img {
     position: absolute;
     top: -1rem;
-    /* Mathematically place it relative to the locked container, 0.5rem below the window ceiling (given nav padding is 1.5rem) */
-    left: -3.5rem;
-    /* Draw it elegantly off to the left */
-    height: 14rem;
-    /* Massive scale without warping ANY nav flex boundaries */
+    left: -2rem;
+    /* Reign in left shift slightly for standard wide displays */
+    height: 12rem;
+    /* 14rem is a bit overkill, 12rem is still massively imposing without risking complete screen wrap issues */
     width: auto;
     object-fit: contain;
-    mix-blend-mode: multiply;
-    filter: contrast(110%) brightness(105%);
-
+    /* Removed mix-blend-mode, this is a native transparent PNG now so let it breathe globally! */
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.05));
     transition: transform 0.3s ease, filter 0.3s ease;
 }
 
 .logo:hover .logo-img {
     transform: translateY(0.25rem);
-    /* Elegant subtle hop entirely preserved */
-    filter: contrast(115%) brightness(105%);
+    filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.08));
+}
+
+/* Footer Independent Logo Stylings */
+.footer-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    margin-bottom: 1.5rem;
+    transition: opacity 0.3s ease;
+}
+
+.footer-logo:hover {
+    opacity: 0.9;
+}
+
+.footer-logo-img {
+    height: 6rem;
+    /* Sensible large footer icon without structural overflow */
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.05));
 }
 
 .nav-links {
@@ -1285,15 +1307,41 @@ footer {
 
 /* Responsive */
 @media (max-width: 768px) {
-    .logo {
-        height: 2.5rem;
-        width: 5.5rem;
+
+    /* Swap logo: hide full wordmark, show emblem-only */
+    .logo-desktop {
+        display: none !important;
     }
 
-    .logo-img {
-        height: 10rem;
-        left: -2.5rem;
-        top: -0.7rem;
+    .logo-mobile {
+        display: block !important;
+    }
+
+    .logo {
+        height: 2.8rem;
+        width: 3rem;
+    }
+
+    .logo-img.logo-mobile {
+        position: absolute;
+        height: 2.8rem;
+        width: 2.8rem;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
+    }
+
+    .logo:hover .logo-img.logo-mobile {
+        transform: translateY(calc(-50% + 1px));
+    }
+
+    .footer-logo {
+        margin-bottom: 1rem;
+    }
+
+    .footer-logo-img {
+        height: 4rem;
     }
 
     .nav-links {
