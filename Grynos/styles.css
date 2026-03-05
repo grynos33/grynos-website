@@ -90,6 +90,8 @@ nav {
     width: 100%;
     top: 0;
     z-index: 100;
+    background: var(--bg-color);
+    /* Solid cream background to enable mix-blend-mode on logo */
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--glass-border);
@@ -108,9 +110,6 @@ nav.scrolled {
     text-decoration: none;
     transition: opacity 0.3s ease;
     margin: 0;
-    position: relative;
-    height: 3.5rem;
-    width: 8rem;
 }
 
 .logo:hover {
@@ -123,22 +122,32 @@ nav.scrolled {
 }
 
 .logo-img {
-    position: absolute;
-    top: -1rem;
-    left: -2rem;
-    /* Reign in left shift slightly for standard wide displays */
-    height: 12rem;
-    /* 14rem is a bit overkill, 12rem is still massively imposing without risking complete screen wrap issues */
-    width: auto;
     object-fit: contain;
-    /* Removed mix-blend-mode, this is a native transparent PNG now so let it breathe globally! */
-    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.05));
+}
+
+/* Desktop full wordmark: use multiply blend to nuke the white background */
+.logo-img.logo-desktop {
+    height: 12rem;
+    width: auto;
+    mix-blend-mode: multiply;
+    filter: contrast(110%) brightness(100%);
+    /* Use negative margins to keep the nav bar slim while the logo extends visually */
+    margin: -3rem -1rem -4.5rem -2rem;
     transition: transform 0.3s ease, filter 0.3s ease;
 }
 
-.logo:hover .logo-img {
-    transform: translateY(0.25rem);
-    filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.08));
+.logo:hover .logo-img.logo-desktop {
+    transform: translateY(0.15rem);
+    filter: contrast(115%) brightness(100%);
+}
+
+/* Mobile emblem stays absolute for clean centering */
+.logo-img.logo-mobile {
+    height: 2.8rem;
+    width: 2.8rem;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
+    transition: transform 0.3s ease;
 }
 
 /* Footer Independent Logo Stylings */
@@ -1317,23 +1326,9 @@ footer {
         display: block !important;
     }
 
-    .logo {
-        height: 2.8rem;
-        width: 3rem;
-    }
-
     .logo-img.logo-mobile {
-        position: absolute;
         height: 2.8rem;
         width: 2.8rem;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
-    }
-
-    .logo:hover .logo-img.logo-mobile {
-        transform: translateY(calc(-50% + 1px));
     }
 
     .footer-logo {
