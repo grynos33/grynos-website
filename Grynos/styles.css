@@ -109,7 +109,10 @@ nav.scrolled {
     transition: opacity 0.3s ease;
     margin: 0;
     position: relative;
-    /* Lock container coordinates so we can drag the actual image outside of standard layout padding smoothly */
+    height: 3.5rem;
+    /* Exactly lock structural height to standard navbar sizes */
+    width: 8rem;
+    /* Reserve appropriate horizontal space for the offset graphic */
 }
 
 .logo:hover {
@@ -117,29 +120,25 @@ nav.scrolled {
 }
 
 .logo-img {
-    height: 12rem;
-    /* Massive native height */
+    position: absolute;
+    top: -1rem;
+    /* Mathematically place it relative to the locked container, 0.5rem below the window ceiling (given nav padding is 1.5rem) */
+    left: -3.5rem;
+    /* Draw it elegantly off to the left */
+    height: 14rem;
+    /* Massive scale without warping ANY nav flex boundaries */
     width: auto;
     object-fit: contain;
     mix-blend-mode: multiply;
     filter: contrast(110%) brightness(105%);
 
-    /* Absolute Negative Boundaries */
-    margin-top: 0;
-    /* Reset the margin that was pulling it into the ceiling */
-    margin-bottom: -5.5rem;
-    /* Push the floor back UP so the nav bar stays super slim and tight */
-    margin-left: -1rem;
-
-    /* explicitly force the graphic DOWN by 2rem to save the top of the crown from clipping */
-    transform: translateY(2rem);
     transition: transform 0.3s ease, filter 0.3s ease;
 }
 
 .logo:hover .logo-img {
-    transform: translateY(2.2rem);
+    transform: translateY(0.25rem);
+    /* Elegant subtle hop entirely preserved */
     filter: contrast(115%) brightness(105%);
-    /* Adding a tiny filter kick rather than a scale jump for elegance */
 }
 
 .nav-links {
