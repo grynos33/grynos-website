@@ -103,19 +103,43 @@ nav.scrolled {
 }
 
 .logo {
-    font-size: 1.8rem;
-    font-weight: 800;
-    letter-spacing: -0.5px;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    color: var(--text-main);
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+    margin: 0;
+    position: relative;
+    /* Lock container coordinates so we can drag the actual image outside of standard layout padding smoothly */
 }
 
-.logo span {
-    background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+.logo:hover {
+    opacity: 0.9;
+}
+
+.logo-img {
+    height: 12rem;
+    /* Massive native height */
+    width: auto;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+    filter: contrast(110%) brightness(105%);
+
+    /* Absolute Negative Boundaries */
+    margin-top: 0;
+    /* Reset the margin that was pulling it into the ceiling */
+    margin-bottom: -5.5rem;
+    /* Push the floor back UP so the nav bar stays super slim and tight */
+    margin-left: -1rem;
+
+    /* explicitly force the graphic DOWN by 2rem to save the top of the crown from clipping */
+    transform: translateY(2rem);
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.logo:hover .logo-img {
+    transform: translateY(2.2rem);
+    filter: contrast(115%) brightness(105%);
+    /* Adding a tiny filter kick rather than a scale jump for elegance */
 }
 
 .nav-links {
@@ -270,6 +294,7 @@ nav.scrolled {
 .text-gradient {
     background: linear-gradient(to right, var(--accent-2), var(--accent-1), var(--accent-3));
     background-size: 300% auto;
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: gradientMove 5s ease infinite alternate;
@@ -1265,7 +1290,7 @@ footer {
         display: none;
     }
 
-    nav > .btn-secondary {
+    nav>.btn-secondary {
         display: none;
     }
 
