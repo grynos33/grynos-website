@@ -1314,6 +1314,31 @@ footer {
     font-size: 0.8rem;
 }
 
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    /* Restore opacity for elements that fade in via animation */
+    .hero h1,
+    .hero p,
+    .cta-group,
+    .badge {
+        opacity: 1;
+        transform: none;
+    }
+
+    .cursor-dot,
+    .cursor-halo {
+        display: none !important;
+    }
+}
+
 /* Responsive */
 @media (max-width: 768px) {
 

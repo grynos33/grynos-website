@@ -397,10 +397,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- Interactive Background (Particles + Connection Lines) - Updated for Light Theme ---
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     const canvas = document.getElementById('interactive-bg');
     const ctx = canvas.getContext('2d');
     let width, height;
     let particles = [];
+
+    // Fixed squared connection distance (120px radius). Computed once, not per-pair.
+    const CONNECT_DIST_SQ = 120 * 120;
+    // Cap particle count to avoid O(n²) blowup on 4K screens.
+    const MAX_PARTICLES = 120;
 
     let mouse = {
         x: null,
@@ -484,7 +491,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function initParticles() {
         particles = [];
-        let numberOfParticles = (width * height) / 8000;
+        const numberOfParticles = Math.min(Math.floor((width * height) / 8000), MAX_PARTICLES);
         for (let i = 0; i < numberOfParticles; i++) {
             particles.push(new Particle());
         }
@@ -515,12 +522,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function connectParticles() {
         for (let a = 0; a < particles.length; a++) {
             for (let b = a + 1; b < particles.length; b++) {
-                let dx = particles[a].x - particles[b].x;
-                let dy = particles[a].y - particles[b].y;
-                let distance = dx * dx + dy * dy;
-                let maxDist = (width / 8) * (height / 8);
-                if (distance < maxDist) {
-                    let opacity = 1 - (distance / maxDist);
+                const dx = particles[a].x - particles[b].x;
+                const dy = particles[a].y - particles[b].y;
+                const distSq = dx * dx + dy * dy;
+                if (distSq < CONNECT_DIST_SQ) {
+                    const opacity = 1 - (distSq / CONNECT_DIST_SQ);
                     ctx.strokeStyle = `rgba(251, 191, 36, ${opacity * 0.25})`;
                     ctx.lineWidth = opacity * 1.8;
                     ctx.beginPath();
@@ -532,29 +538,35 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    initParticles();
-    animateParticles();
+    if (!reducedMotion) {
+        initParticles();
+        animateParticles();
+    } else {
+        canvas.style.display = 'none';
+    }
 
     // --- 3D Card Tilt Effect ---
     const cards = document.querySelectorAll('.service-card');
 
-    cards.forEach(card => {
-        card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
+    if (!reducedMotion) {
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
 
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
 
-            const rotateX = ((y - centerY) / centerY) * -10;
-            const rotateY = ((x - centerX) / centerX) * 10;
+                const rotateX = ((y - centerY) / centerY) * -10;
+                const rotateY = ((x - centerX) / centerX) * 10;
 
-            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+            });
         });
-
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-        });
-    });
+    }
 });
