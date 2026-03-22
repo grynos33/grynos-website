@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Flow — AI Order Bot Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #fcfbf7;
+            --accent-1: #fbbf24;
+            --accent-2: #f59e0b;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --glass-bg: rgba(255,255,255,0.72);
+            --glass-border: rgba(255,255,255,0.65);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+        .bg-glow { position: fixed; top: 30%; left: 50%; transform: translate(-50%,-50%); width: 60vw; height: 60vw; background: radial-gradient(circle, rgba(251,191,36,.12) 0%, transparent 65%); z-index: 0; pointer-events: none; }
+
+        .cursor-dot, .cursor-halo { position: fixed; top: 0; left: 0; border-radius: 50%; transform: translate(-50%,-50%); pointer-events: none; z-index: 9999; }
+        .cursor-dot { width: 8px; height: 8px; background: var(--accent-2); box-shadow: 0 0 10px var(--accent-1); }
+        .cursor-halo { width: 40px; height: 40px; border: 1px solid rgba(245,158,11,.6); transition: width .3s, height .3s, background .3s; }
+        .cursor-halo.active { width: 60px; height: 60px; background: rgba(251,191,36,.1); border-color: var(--accent-2); }
+
+        /* Header */
+        .chat-header {
+            position: relative; z-index: 10;
+            background: rgba(255,255,255,0.82);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 14px 20px;
+            display: flex; align-items: center; gap: 14px;
+            flex-shrink: 0;
+        }
+
+        .shop-avatar {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(251,191,36,0.35);
+        }
+
+        .shop-info { flex: 1; }
+        .shop-name { font-weight: 700; font-size: 1rem; }
+        .shop-status { font-size: .72rem; color: var(--muted); margin-top: 1px; }
+
+        .header-right { display: flex; align-items: center; gap: 12px; }
+
+        .demo-badge {
+            background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+            color: var(--text); font-size: .68rem; font-weight: 700;
+            padding: 3px 10px; border-radius: 20px; white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(251,191,36,0.3);
+        }
+
+        .back-link { color: var(--muted); text-decoration: none; font-size: .8rem; font-weight: 600; transition: color .2s; white-space: nowrap; }
+        .back-link:hover { color: var(--accent-2); }
+
+        /* Chat window */
+        .chat-window {
+            flex: 1; overflow-y: auto;
+            padding: 20px 16px 8px;
+            display: flex; flex-direction: column; gap: 10px;
+            position: relative; z-index: 1;
+        }
+
+        /* Bubbles */
+        .message { display: flex; align-items: flex-end; gap: 8px; max-width: 80%; animation: fadeUp .25s ease; }
+        @keyframes fadeUp { from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);} }
+        .message.bot  { align-self: flex-start; }
+        .message.user { align-self: flex-end; flex-direction: row-reverse; }
+
+        .bubble { padding: 10px 14px; border-radius: 18px; font-size: .9rem; line-height: 1.5; }
+        .message.bot .bubble { background: var(--glass-bg); border: 1px solid var(--glass-border); backdrop-filter: blur(10px); color: var(--text); border-bottom-left-radius: 4px; }
+        .message.user .bubble { background: linear-gradient(135deg, var(--accent-1), var(--accent-2)); color: #1a1a1a; font-weight: 600; border-bottom-right-radius: 4px; box-shadow: 0 4px 12px rgba(251,191,36,0.35); }
+
+        /* Typing indicator */
+        .typing-indicator { display: flex; align-self: flex-start; background: var(--glass-bg); border: 1px solid var(--glass-border); backdrop-filter: blur(10px); padding: 12px 16px; border-radius: 18px; border-bottom-left-radius: 4px; gap: 4px; animation: fadeUp .2s ease; }
+        .typing-indicator span { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); animation: bounce 1.2s infinite ease-in-out; }
+        .typing-indicator span:nth-child(2){animation-delay:.2s;} .typing-indicator span:nth-child(3){animation-delay:.4s;}
+        @keyframes bounce{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-6px);}}
+
+        /* Quick-reply chips */
+        .quick-replies { display: flex; flex-wrap: wrap; gap: 8px; padding: 4px 0 8px; animation: fadeUp .25s ease; }
+        .chip { background: var(--glass-bg); border: 1.5px solid rgba(245,158,11,.5); backdrop-filter: blur(8px); border-radius: 24px; padding: 7px 16px; font-family: 'Outfit',sans-serif; font-size: .83rem; font-weight: 600; color: var(--text); transition: background .15s, border-color .15s, transform .1s; white-space: nowrap; }
+        .chip:hover { background: linear-gradient(90deg, var(--accent-1), var(--accent-2)); border-color: transparent; color: #1a1a1a; }
+        .chip:active { transform: scale(.97); }
+
+        /* Bottom bar */
+        .bottom-bar {
+            position: relative; z-index: 10;
+            padding: 10px 16px 14px;
+            background: rgba(255,255,255,0.82);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-top: 1px solid var(--glass-border);
+            flex-shrink: 0;
+            display: flex; align-items: center; gap: 10px;
+        }
+
+        .bottom-bar input { flex: 1; border: 1.5px solid rgba(0,0,0,.08); border-radius: 24px; padding: 10px 16px; font-family: 'Outfit',sans-serif; font-size: .9rem; color: var(--text); background: rgba(255,255,255,.6); outline: none; transition: border-color .2s; }
+        .bottom-bar input:focus { border-color: var(--accent-2); }
+        .bottom-bar input:disabled { opacity: .45; }
+
+        .send-btn { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-1), var(--accent-2)); border: none; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 12px rgba(251,191,36,.4); transition: transform .15s, box-shadow .15s; }
+        .send-btn:hover { transform: scale(1.08); box-shadow: 0 6px 18px rgba(245,158,11,.5); }
+        .send-btn:active { transform: scale(.95); }
+        .send-btn:disabled { opacity: .4; transform: none; box-shadow: none; }
+        .send-btn svg { width: 18px; height: 18px; fill: #1f2937; }
+
+        .reset-btn { background: transparent; border: 1.5px solid rgba(245,158,11,.5); color: var(--text); font-family: 'Outfit',sans-serif; font-size: .83rem; font-weight: 600; padding: 9px 18px; border-radius: 24px; white-space: nowrap; transition: background .2s; display: none; }
+        .reset-btn:hover { background: linear-gradient(90deg, var(--accent-1), var(--accent-2)); border-color: transparent; }
+        .reset-btn.visible { display: block; }
+
+        .chat-window::-webkit-scrollbar { width: 4px; }
+        .chat-window::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 2px; }
+    </style>
+</head>
+<body>
+
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-halo" id="cursorHalo"></div>
+    <canvas id="bg-canvas"></canvas>
+    <div class="bg-glow"></div>
+
+    <header class="chat-header">
+        <div class="shop-avatar">🛍️</div>
+        <div class="shop-info">
+            <div class="shop-name">Ate Nena's Ukay</div>
+            <div class="shop-status">Typically replies instantly</div>
+        </div>
+        <div class="header-right">
+            <div class="demo-badge">Chatbot Flow Demo</div>
+            <a href="https://grynos.info" class="back-link">← Back</a>
+        </div>
+    </header>
+
+    <div class="chat-window" id="chatWindow"></div>
+
+    <div class="bottom-bar">
+        <button class="reset-btn" id="resetBtn" onclick="resetChat()">Start Over</button>
+        <input type="text" id="userInput" placeholder="Or type here..." autocomplete="off" disabled>
+        <button class="send-btn" id="sendBtn" onclick="sendTyped()" disabled>
+            <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        </button>
+    </div>
+
+    <script>
+        /* ── Cursor ── */
+        const dot = document.getElementById('cursorDot'), halo = document.getElementById('cursorHalo');
+        document.addEventListener('mousemove', e => { dot.style.left=halo.style.left=e.clientX+'px'; dot.style.top=halo.style.top=e.clientY+'px'; });
+        document.querySelectorAll('button,a,input').forEach(el=>{el.addEventListener('mouseenter',()=>halo.classList.add('active'));el.addEventListener('mouseleave',()=>halo.classList.remove('active'));});
+
+        /* ── Particles ── */
+        const canvas = document.getElementById('bg-canvas'), ctx = canvas.getContext('2d');
+        let W, H, particles = [];
+        const CONNECT_SQ = 120*120, MAX_P = 80;
+        function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+        window.addEventListener('resize',()=>{resize();initP();}); resize();
+        class P{constructor(){this.reset();}reset(){this.x=Math.random()*W;this.y=Math.random()*H;this.vx=(Math.random()-.5)*.5;this.vy=(Math.random()-.5)*.5;this.r=Math.random()*2+1;}update(){this.x+=this.vx;this.y+=this.vy;if(this.x<0||this.x>W)this.vx*=-1;if(this.y<0||this.y>H)this.vy*=-1;}draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fillStyle='rgba(245,158,11,0.35)';ctx.fill();}}
+        function initP(){particles=[];const n=Math.min(Math.floor(W*H/9000),MAX_P);for(let i=0;i<n;i++)particles.push(new P());}
+        function connect(){for(let a=0;a<particles.length;a++)for(let b=a+1;b<particles.length;b++){const dx=particles[a].x-particles[b].x,dy=particles[a].y-particles[b].y,dSq=dx*dx+dy*dy;if(dSq<CONNECT_SQ){const o=1-dSq/CONNECT_SQ;ctx.strokeStyle=`rgba(251,191,36,${o*.22})`;ctx.lineWidth=o*1.8;ctx.beginPath();ctx.moveTo(particles[a].x,particles[a].y);ctx.lineTo(particles[b].x,particles[b].y);ctx.stroke();}}}
+        function animate(){ctx.clearRect(0,0,W,H);particles.forEach(p=>{p.update();p.draw();});connect();requestAnimationFrame(animate);}
+        initP(); animate();
+
+        /* ── Chat ── */
+        let state=0, orderItem='', orderQty='', orderAddr='';
+        const chatWindow=document.getElementById('chatWindow'), userInput=document.getElementById('userInput'), sendBtn=document.getElementById('sendBtn'), resetBtn=document.getElementById('resetBtn');
+
+        const QUICK_REPLIES = {
+            0:['Floral Blouse 👗','Denim Jacket 🧥','Maong Pants 👖','Ukay Bundle 🛍️'],
+            1:['1 piece','2 pieces','3 pieces','5 pieces'],
+            2:['123 Rizal St, Quezon City','Unit 4B, Taguig City','Brgy. San Jose, Cebu City'],
+            3:['Yes ✅','No ❌'],
+        };
+
+        function scrollBottom(){chatWindow.scrollTop=chatWindow.scrollHeight;}
+        function addMessage(html,type){const msg=document.createElement('div');msg.className=`message ${type}`;msg.innerHTML=`<div class="bubble">${html}</div>`;chatWindow.appendChild(msg);scrollBottom();}
+        function showTyping(){const el=document.createElement('div');el.className='typing-indicator';el.id='typing';el.innerHTML='<span></span><span></span><span></span>';chatWindow.appendChild(el);scrollBottom();return el;}
+        function clearChips(){document.getElementById('chips')?.remove();}
+
+        function showChips(stateKey){
+            clearChips();
+            const replies=QUICK_REPLIES[stateKey];if(!replies)return;
+            const row=document.createElement('div');row.className='quick-replies';row.id='chips';
+            replies.forEach(label=>{const btn=document.createElement('button');btn.className='chip';btn.textContent=label;btn.onclick=()=>handleReply(label);row.appendChild(btn);});
+            chatWindow.appendChild(row);scrollBottom();
+        }
+
+        function lockInput(){userInput.disabled=true;sendBtn.disabled=true;}
+        function unlockInput(){userInput.disabled=false;sendBtn.disabled=false;}
+
+        function botSay(html,afterCb,delay=650){
+            lockInput();clearChips();
+            const indicator=showTyping();
+            setTimeout(()=>{indicator.remove();addMessage(html,'bot');if(afterCb)afterCb();},delay);
+        }
+
+        function handleReply(text){clearChips();addMessage(text,'user');processInput(text);}
+
+        function sendTyped(){const text=userInput.value.trim();if(!text||userInput.disabled)return;userInput.value='';clearChips();addMessage(text,'user');processInput(text);}
+        userInput.addEventListener('keydown',e=>{if(e.key==='Enter')sendTyped();});
+
+        function processInput(text){
+            switch(state){
+                case 0: orderItem=text;state=1;botSay(`Got it! <strong>${orderItem}</strong> — How many pieces would you like?`,()=>showChips(1));break;
+                case 1: orderQty=text;state=2;botSay('And where should we deliver? Please share your complete address. 📍',()=>showChips(2));break;
+                case 2: orderAddr=text;state=3;botSay(`Here's your order summary:<br><br>🛍️ <strong>Item:</strong> ${orderItem}<br>📦 <strong>Qty:</strong> ${orderQty}<br>📍 <strong>Deliver to:</strong> ${orderAddr}<br><br>Confirm your order?`,()=>showChips(3));break;
+                case 3:
+                    if(/^yes/i.test(text)){state=4;botSay('Order received! ✅ Ate Nena will contact you within 24 hours. Thank you for shopping with us!',()=>{resetBtn.classList.add('visible');});}
+                    else{state=5;botSay('No problem! Feel free to start a new order anytime. 😊',()=>{resetBtn.classList.add('visible');});}
+                    break;
+            }
+        }
+
+        function resetChat(){chatWindow.innerHTML='';state=0;orderItem='';orderQty='';orderAddr='';resetBtn.classList.remove('visible');lockInput();userInput.value='';triggerGreeting();}
+
+        function triggerGreeting(){
+            lockInput();
+            const indicator=showTyping();
+            setTimeout(()=>{indicator.remove();addMessage("Hi! Welcome to Ate Nena's Ukay. What would you like to order today? 👗",'bot');showChips(0);},800);
+        }
+
+        triggerGreeting();
+    </script>
+
+</body>
+</html>

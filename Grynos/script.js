@@ -115,45 +115,38 @@ document.addEventListener('DOMContentLoaded', () => {
     const portfolioProjects = [
         {
             icon: 'fa-solid fa-robot',
-            title: 'AI Chatbot Platform',
-            desc: 'Custom chatbot for a retail brand',
+            title: 'ChatrFlow',
+            desc: 'AI order chatbot for PH social sellers on Messenger',
             tag: 'AI Automation',
-            url: '#'
+            url: 'demos/chatrflow.html'
         },
         {
-            icon: 'fa-solid fa-cart-shopping',
+            icon: 'fa-solid fa-people-roof',
+            title: 'Dai Kazoku',
+            desc: 'Family remittance planner for OFWs and their families',
+            tag: 'Mobile App',
+            url: 'demos/dai-kazoku.html'
+        },
+        {
+            icon: 'fa-solid fa-record-vinyl',
             title: 'E-commerce Store',
-            desc: 'Full online store with payment integration',
-            tag: 'Web + E-commerce',
-            url: '#'
+            desc: 'Vinyl record e-commerce store with full cart experience',
+            tag: 'E-commerce',
+            url: 'demos/marvsabbeyroadshop.html'
         },
         {
-            icon: 'fa-solid fa-gauge-high',
-            title: 'Business Dashboard',
-            desc: 'Real-time analytics dashboard for a startup',
-            tag: 'Web Development',
-            url: '#'
+            icon: 'fa-solid fa-building-columns',
+            title: 'DunesGate',
+            desc: 'Landing page for an investing company',
+            tag: 'Web Dev',
+            url: 'https://dunesgate.com'
         },
         {
-            icon: 'fa-solid fa-gears',
-            title: 'Workflow Automation',
-            desc: 'Automated invoicing & scheduling system',
-            tag: 'AI Automation',
-            url: '#'
-        },
-        {
-            icon: 'fa-solid fa-globe',
-            title: 'Portfolio Website',
-            desc: 'Modern portfolio for a creative agency',
-            tag: 'Web Development',
-            url: '#'
-        },
-        {
-            icon: 'fa-solid fa-bullhorn',
-            title: 'Marketing Landing Page',
-            desc: 'High-conversion landing page for SaaS',
-            tag: 'Growth Strategy',
-            url: '#'
+            icon: 'fa-solid fa-boxes-stacking',
+            title: 'Order Dashboard',
+            desc: 'Manufacturer order tracker with live status management',
+            tag: 'SaaS',
+            url: 'demos/siotrack.html'
         }
     ];
 

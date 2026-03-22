@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dai Kazoku — Family Remittance Planner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #fcfbf7;
+            --accent-1: #fbbf24;
+            --accent-2: #f59e0b;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --glass-bg: rgba(255,255,255,0.72);
+            --glass-border: rgba(255,255,255,0.65);
+            --green: #10b981;
+            --red: #ef4444;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+
+        body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); min-height: 100dvh; }
+
+        #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+        .bg-glow { position: fixed; top: 30%; left: 50%; transform: translate(-50%,-50%); width: 60vw; height: 60vw; background: radial-gradient(circle, rgba(251,191,36,.12) 0%, transparent 65%); z-index: 0; pointer-events: none; }
+
+        .cursor-dot, .cursor-halo { position: fixed; top: 0; left: 0; border-radius: 50%; transform: translate(-50%,-50%); pointer-events: none; z-index: 9999; }
+        .cursor-dot { width: 8px; height: 8px; background: var(--accent-2); box-shadow: 0 0 10px var(--accent-1); }
+        .cursor-halo { width: 40px; height: 40px; border: 1px solid rgba(245,158,11,.6); transition: width .3s, height .3s, background .3s; }
+        .cursor-halo.active { width: 60px; height: 60px; background: rgba(251,191,36,.1); border-color: var(--accent-2); }
+
+        .header { position: sticky; top: 0; z-index: 10; background: rgba(255,255,255,0.82); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--glass-border); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+        .header-left { display: flex; flex-direction: column; }
+        .logo { font-size: 1.25rem; font-weight: 800; background: linear-gradient(90deg, var(--accent-1), var(--accent-2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .subtitle { font-size: .75rem; color: var(--muted); margin-top: 1px; font-weight: 600; }
+        .back-link { color: var(--muted); text-decoration: none; font-size: .82rem; font-weight: 600; transition: color .2s; }
+        .back-link:hover { color: var(--accent-2); }
+
+        .main { max-width: 680px; margin: 0 auto; padding: 28px 16px 56px; display: flex; flex-direction: column; gap: 20px; position: relative; z-index: 1; }
+
+        .card { background: var(--glass-bg); border: 1px solid var(--glass-border); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 20px; padding: 22px; box-shadow: 0 4px 24px rgba(0,0,0,0.05); }
+        .card-title { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 14px; }
+
+        .income-field { display: flex; align-items: center; gap: 10px; border: 1.5px solid rgba(0,0,0,.08); border-radius: 14px; padding: 10px 16px; background: rgba(255,255,255,.5); transition: border-color .2s; }
+        .income-field:focus-within { border-color: var(--accent-2); box-shadow: 0 0 0 3px rgba(251,191,36,.15); }
+        .currency-label { font-weight: 700; color: var(--muted); font-size: 1rem; }
+        .income-input { flex: 1; border: none; background: transparent; font-family: 'Outfit',sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--text); outline: none; }
+        .income-input::placeholder { color: #d1d5db; font-weight: 400; }
+
+        .members-table { width: 100%; border-collapse: collapse; }
+        .members-table th { text-align: left; font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); padding-bottom: 10px; border-bottom: 1px solid rgba(0,0,0,.07); }
+        .members-table th:last-child { text-align: right; width: 36px; }
+        .member-row td { padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,.04); }
+        .member-row td:last-child { text-align: right; }
+        .member-input { border: none; background: transparent; font-family: 'Outfit',sans-serif; font-size: .9rem; color: var(--text); outline: none; padding: 4px 0; }
+        .member-input.name-input { width: 100%; }
+        .amount-cell { display: flex; align-items: center; gap: 4px; }
+        .amount-prefix { color: var(--muted); font-size: .85rem; }
+        .member-input.amount-input { width: 90px; text-align: right; }
+        .remove-btn { background: none; border: none; color: #d1d5db; font-size: 1rem; padding: 4px; border-radius: 4px; transition: color .2s; line-height: 1; }
+        .remove-btn:hover { color: var(--red); }
+
+        .add-member-btn { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,.4); border: 1.5px dashed rgba(0,0,0,.12); border-radius: 12px; padding: 10px 16px; font-family: 'Outfit',sans-serif; font-size: .85rem; font-weight: 600; color: var(--muted); width: 100%; margin-top: 12px; transition: border-color .2s, color .2s, background .2s; }
+        .add-member-btn:hover { border-color: var(--accent-2); color: var(--text); background: rgba(251,191,36,.06); }
+
+        .breakdown-list { display: flex; flex-direction: column; gap: 14px; }
+        .breakdown-item { display: flex; flex-direction: column; gap: 4px; }
+        .breakdown-row { display: flex; justify-content: space-between; align-items: center; font-size: .88rem; }
+        .breakdown-name { font-weight: 600; }
+        .breakdown-amount { font-weight: 700; }
+        .breakdown-pct { font-size: .75rem; color: var(--muted); }
+        .progress-bar-bg { height: 6px; background: rgba(0,0,0,.07); border-radius: 4px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent-1), var(--accent-2)); border-radius: 4px; transition: width .3s ease; }
+        .empty-state { color: var(--muted); font-size: .85rem; text-align: center; padding: 16px 0; }
+
+        .alert { padding: 12px 16px; border-radius: 12px; font-size: .88rem; font-weight: 600; margin-bottom: 12px; backdrop-filter: blur(8px); }
+        .alert.surplus { background: rgba(16,185,129,.12); color: #065f46; border: 1px solid rgba(16,185,129,.25); }
+        .alert.deficit { background: rgba(239,68,68,.1); color: #991b1b; border: 1px solid rgba(239,68,68,.2); }
+
+        .summary-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 14px; border-top: 1px solid rgba(0,0,0,.07); margin-top: 4px; font-size: .85rem; }
+        .summary-label { color: var(--muted); font-weight: 600; }
+        .summary-value { font-weight: 700; font-size: .95rem; }
+        .summary-value.surplus { color: var(--green); }
+        .summary-value.deficit { color: var(--red); }
+
+        @media (max-width: 480px) { .income-input { font-size: 1.1rem; } .member-input.amount-input { width: 75px; } }
+    </style>
+</head>
+<body>
+
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-halo" id="cursorHalo"></div>
+    <canvas id="bg-canvas"></canvas>
+    <div class="bg-glow"></div>
+
+    <header class="header">
+        <div class="header-left">
+            <div class="logo">Family Remittance Planner</div>
+        </div>
+        <a href="https://grynos.info" class="back-link">← Back to grynos.info</a>
+    </header>
+
+    <main class="main">
+
+        <div class="card">
+            <div class="card-title">Your Monthly Remittance</div>
+            <div class="income-field">
+                <span class="currency-label">₱</span>
+                <input type="number" class="income-input" id="incomeInput" placeholder="0" min="0" oninput="recalculate()">
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Family Members</div>
+            <table class="members-table">
+                <thead><tr><th>Name</th><th style="text-align:right;padding-right:8px">Monthly Need</th><th></th></tr></thead>
+                <tbody id="membersBody"></tbody>
+            </table>
+            <button class="add-member-btn" onclick="addMember()">+ Add Member</button>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Allocation Breakdown</div>
+            <div id="alertBanner"></div>
+            <div class="breakdown-list" id="breakdownList"><div class="empty-state">Add family members above to see breakdown.</div></div>
+            <div class="summary-footer" id="summaryFooter" style="display:none">
+                <span class="summary-label">Total Allocated</span>
+                <span class="summary-value" id="summaryValue"></span>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        /* ── Cursor ── */
+        const dot=document.getElementById('cursorDot'),halo=document.getElementById('cursorHalo');
+        document.addEventListener('mousemove',e=>{dot.style.left=halo.style.left=e.clientX+'px';dot.style.top=halo.style.top=e.clientY+'px';});
+        document.querySelectorAll('button,a,input').forEach(el=>{el.addEventListener('mouseenter',()=>halo.classList.add('active'));el.addEventListener('mouseleave',()=>halo.classList.remove('active'));});
+
+        /* ── Particles ── */
+        const canvas=document.getElementById('bg-canvas'),ctx=canvas.getContext('2d');
+        let W,H,particles=[];
+        const CONNECT_SQ=120*120,MAX_P=80;
+        function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+        window.addEventListener('resize',()=>{resize();initP();}); resize();
+        class P{constructor(){this.reset();}reset(){this.x=Math.random()*W;this.y=Math.random()*H;this.vx=(Math.random()-.5)*.5;this.vy=(Math.random()-.5)*.5;this.r=Math.random()*2+1;}update(){this.x+=this.vx;this.y+=this.vy;if(this.x<0||this.x>W)this.vx*=-1;if(this.y<0||this.y>H)this.vy*=-1;}draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fillStyle='rgba(245,158,11,0.35)';ctx.fill();}}
+        function initP(){particles=[];const n=Math.min(Math.floor(W*H/9000),MAX_P);for(let i=0;i<n;i++)particles.push(new P());}
+        function connect(){for(let a=0;a<particles.length;a++)for(let b=a+1;b<particles.length;b++){const dx=particles[a].x-particles[b].x,dy=particles[a].y-particles[b].y,dSq=dx*dx+dy*dy;if(dSq<CONNECT_SQ){const o=1-dSq/CONNECT_SQ;ctx.strokeStyle=`rgba(251,191,36,${o*.22})`;ctx.lineWidth=o*1.8;ctx.beginPath();ctx.moveTo(particles[a].x,particles[a].y);ctx.lineTo(particles[b].x,particles[b].y);ctx.stroke();}}}
+        function animate(){ctx.clearRect(0,0,W,H);particles.forEach(p=>{p.update();p.draw();});connect();requestAnimationFrame(animate);}
+        initP(); animate();
+
+        /* ── App ── */
+        let members=[],nextId=0;
+        function formatPHP(n){return '₱'+n.toLocaleString('en-PH');}
+        function getIncome(){const v=parseFloat(document.getElementById('incomeInput').value);return isNaN(v)||v<0?0:v;}
+        function addMember(name='',amount=''){const id=nextId++;members.push({id,name,amount});renderMembersTable();recalculate();}
+        function removeMember(id){members=members.filter(m=>m.id!==id);renderMembersTable();recalculate();}
+        function renderMembersTable(){document.getElementById('membersBody').innerHTML=members.map(m=>`<tr class="member-row"><td><input type="text" class="member-input name-input" placeholder="e.g. Nanay" value="${escapeHtml(m.name)}" oninput="updateMember(${m.id},'name',this.value)"></td><td><div class="amount-cell" style="justify-content:flex-end"><span class="amount-prefix">₱</span><input type="number" class="member-input amount-input" placeholder="0" value="${m.amount}" min="0" oninput="updateMember(${m.id},'amount',this.value)"></div></td><td><button class="remove-btn" onclick="removeMember(${m.id})" title="Remove">×</button></td></tr>`).join('');}
+        function updateMember(id,field,value){const m=members.find(m=>m.id===id);if(m){m[field]=value;recalculate();}}
+        function escapeHtml(str){return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+        function recalculate(){
+            const income=getIncome(),list=document.getElementById('breakdownList'),al=document.getElementById('alertBanner'),footer=document.getElementById('summaryFooter'),val=document.getElementById('summaryValue');
+            if(!members.length){list.innerHTML='<div class="empty-state">Add family members above to see breakdown.</div>';al.innerHTML='';footer.style.display='none';return;}
+            const totalNeeded=members.reduce((s,m)=>s+(parseFloat(m.amount)||0),0);
+            list.innerHTML=members.map(m=>{const amt=parseFloat(m.amount)||0,name=m.name.trim()||'(unnamed)',pct=income>0?Math.min((amt/income)*100,100):0,pctDisplay=income>0?((amt/income)*100).toFixed(1)+'%':'—';return `<div class="breakdown-item"><div class="breakdown-row"><span class="breakdown-name">${escapeHtml(name)}</span><div style="display:flex;gap:10px;align-items:center"><span class="breakdown-pct">${pctDisplay}</span><span class="breakdown-amount">${formatPHP(amt)}</span></div></div><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${pct}%"></div></div></div>`;}).join('');
+            if(!income){al.innerHTML='';}else if(totalNeeded>income){al.innerHTML=`<div class="alert deficit">⚠️ Over budget by ${formatPHP(totalNeeded-income)}</div>`;}else{al.innerHTML=`<div class="alert surplus">✅ Surplus: ${formatPHP(income-totalNeeded)}</div>`;}
+            footer.style.display='flex';
+            const diff=income-totalNeeded;
+            if(!income){val.textContent=`${formatPHP(totalNeeded)} allocated`;val.className='summary-value';}
+            else if(diff<0){val.textContent=`${formatPHP(totalNeeded)} / ${formatPHP(income)}`;val.className='summary-value deficit';}
+            else{val.textContent=`${formatPHP(totalNeeded)} / ${formatPHP(income)}`;val.className='summary-value surplus';}
+        }
+
+        addMember('Nanay',5000);
+        addMember('Ate Maria',3000);
+    </script>
+
+</body>
+</html>
