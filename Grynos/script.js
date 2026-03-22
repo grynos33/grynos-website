@@ -297,6 +297,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- Service Card Modal ---
+    const hourlyRateConfig = {
+        ph: { rate: '₱1,200', symbol: '₱', label: 'PHP', suffix: '/hr' },
+        sa: { rate: '80 SAR', symbol: 'ر.س', label: 'SAR', suffix: '/hr' },
+        us: { rate: '$20', symbol: '$', label: 'USD', suffix: '/hr' }
+    };
+    const regionKeys = ['ph', 'sa', 'us'];
+    let activeRegion = 'ph';
+
     const serviceData = [
         {
             icon: 'fa-solid fa-users-rays',
@@ -304,9 +312,9 @@ document.addEventListener('DOMContentLoaded', () => {
             desc: 'I build custom AI solutions and micro SaaS products that integrate into your daily operations — from process automation to focused software tools that solve one problem really well. Whether it\'s a tailored AI co-pilot or a lean SaaS MVP, I design systems that save you hours every week.',
             features: ['Process Automation', 'Custom API Integrations', 'Micro SaaS Development', 'MVP to Launch Pipeline', 'Subscription & Billing Setup', 'Workflow Optimization'],
             rates: [
-                { name: 'Starter', price: '₱25,000', desc: 'Single workflow automation with basic integrations', featured: false, discount: 'free' },
-                { name: 'Growth', price: '₱45,000', desc: 'Multi-process automation, micro SaaS MVP, or custom AI co-pilot', featured: true, discount: 'half' },
-                { name: 'Enterprise', price: '₱80,000+', desc: 'Full-scale intelligent system with ongoing support', featured: false }
+                { name: 'Starter', price: '~20 hrs', desc: 'Single workflow automation with basic integrations', featured: false, discount: 'half' },
+                { name: 'Growth', price: '~38 hrs', desc: 'Multi-process automation, micro SaaS MVP, or custom AI co-pilot', featured: true },
+                { name: 'Enterprise', price: '~65+ hrs', desc: 'Full-scale intelligent system with ongoing support', featured: false }
             ]
         },
         {
@@ -315,9 +323,9 @@ document.addEventListener('DOMContentLoaded', () => {
             desc: 'I build high-performance digital storefronts and websites that act as your 24/7 sales partner. With a focus on fast setup and seamless user experience, I help you get your business online and scaling without the technical stress.',
             features: ['Rapid Deployment & Setup', 'Custom Web Development', 'E-commerce Architecture', 'Payment & Inventory Automation', 'SEO Optimization', 'Mobile-First Design'],
             rates: [
-                { name: 'Essential', price: '₱20,000', desc: 'Professional landing page or portfolio site', featured: false, discount: 'free' },
-                { name: 'Business', price: '₱50,000', desc: 'Full website with e-commerce & payment integration', featured: true, discount: 'half' },
-                { name: 'Flagship', price: '₱90,000+', desc: 'Custom-built platform with advanced features', featured: false }
+                { name: 'Essential', price: '~16 hrs', desc: 'Professional landing page or portfolio site', featured: false, discount: 'half' },
+                { name: 'Business', price: '~42 hrs', desc: 'Full website with e-commerce & payment integration', featured: true },
+                { name: 'Flagship', price: '~75+ hrs', desc: 'Custom-built platform with advanced features', featured: false }
             ]
         },
         {
@@ -326,9 +334,9 @@ document.addEventListener('DOMContentLoaded', () => {
             desc: 'I work directly with you to identify bottlenecks in your current system and map out a safe, effective transition to automated workflows. Get expert guidance on tech stack decisions and implementation roadmaps.',
             features: ['1-on-1 Consultations', 'Tech Stack Audits', 'Implementation Roadmaps', 'Ongoing Technical Support', 'Performance Reviews', 'Scaling Strategy'],
             rates: [
-                { name: 'Consult', price: '₱5,000', desc: 'Single 90-minute deep-dive session', featured: false, discount: 'free' },
-                { name: 'Advisor', price: '₱15,000/mo', desc: 'Weekly sessions + async support & roadmap', featured: true, discount: 'half' },
-                { name: 'Partner', price: '₱30,000/mo', desc: 'Dedicated strategic partner with hands-on support', featured: false }
+                { name: 'Consult', price: '~4 hrs', desc: 'Single 90-minute deep-dive session', featured: false, discount: 'half' },
+                { name: 'Advisor', price: '~12 hrs/mo', desc: 'Weekly sessions + async support & roadmap', featured: true },
+                { name: 'Partner', price: '~25 hrs/mo', desc: 'Dedicated strategic partner with hands-on support', featured: false }
             ]
         }
     ];
@@ -344,17 +352,72 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function openServiceModal(index) {
         const data = serviceData[index];
+        const region = hourlyRateConfig[activeRegion];
+
         modalIcon.innerHTML = `<i class="${data.icon}"></i>`;
         modalTitle.textContent = data.title;
         modalDesc.textContent = data.desc;
 
-        modalRates.innerHTML = data.rates.map(r => `
-            <div class="rate-tier${r.featured ? ' featured' : ''}">
-                <div class="rate-tier-name">${r.name}</div>
-                <div class="rate-tier-price">${r.discount === 'free' ? `<span class="rate-original-price">${r.price}</span> <span class="rate-free-badge">FREE</span>` : r.discount === 'half' ? `<span class="rate-original-price">${r.price}</span> <span class="rate-half-badge">50% OFF</span>` : r.price}</div>
-                <div class="rate-tier-desc">${r.desc}</div>
+        const regionIndex = regionKeys.indexOf(activeRegion);
+
+        modalRates.innerHTML = `
+            <div class="region-toggle region-toggle-3">
+                ${regionKeys.map(key => `
+                    <button class="region-btn${activeRegion === key ? ' active' : ''}" data-region="${key}">
+                        <span class="currency-symbol">${hourlyRateConfig[key].symbol}</span>${hourlyRateConfig[key].label}
+                    </button>
+                `).join('')}
+                <div class="region-toggle-slider" style="transform: translateX(${regionIndex * 100}%)"></div>
             </div>
-        `).join('');
+            <div class="hourly-rate-card">
+                <div class="hourly-rate-label">Hourly Rate</div>
+                <div class="hourly-rate-price" id="hourly-rate-value">
+                    ${region.rate}<span class="hourly-rate-suffix">${region.suffix}</span>
+                </div>
+                <div class="hourly-rate-note">Billed per hour, minimum 2-hour engagement</div>
+            </div>
+            <div class="rate-section-label">Or choose a project package</div>
+            <div class="rate-card">
+                ${data.rates.map(r => `
+                    <div class="rate-tier${r.featured ? ' featured' : ''}">
+                        <div class="rate-tier-name">${r.name}</div>
+                        <div class="rate-tier-price">${
+                            r.discount === 'free'
+                                ? `<span class="rate-original-price">${r.price}</span> <span class="rate-free-badge">FREE</span>`
+                                : r.discount === 'half'
+                                ? `<span class="rate-original-price">${r.price}</span> <span class="rate-half-badge">50% OFF</span>`
+                                : r.price
+                        }</div>
+                        <div class="rate-tier-desc">${r.desc}</div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+
+        // Toggle event listeners
+        const regionBtns = modalRates.querySelectorAll('.region-btn');
+        const slider = modalRates.querySelector('.region-toggle-slider');
+        const rateDisplay = modalRates.querySelector('#hourly-rate-value');
+
+        regionBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const newRegion = btn.dataset.region;
+                if (newRegion === activeRegion) return;
+
+                activeRegion = newRegion;
+                const config = hourlyRateConfig[activeRegion];
+
+                regionBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                slider.style.transform = `translateX(${regionKeys.indexOf(activeRegion) * 100}%)`;
+
+                rateDisplay.style.opacity = '0';
+                setTimeout(() => {
+                    rateDisplay.innerHTML = `${config.rate}<span class="hourly-rate-suffix">${config.suffix}</span>`;
+                    rateDisplay.style.opacity = '1';
+                }, 200);
+            });
+        });
 
         modalFeatures.innerHTML = data.features.map(f =>
             `<li><i class="fa-solid fa-check"></i> ${f}</li>`
